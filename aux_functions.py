@@ -4,9 +4,9 @@ import random
 from collections import Counter
 
 
-def request_all_tweets_as_df():
+def request_all_tweets_as_df(api_url):
     try:
-        json = requests.get('http://50.116.36.123:5000/tweets').json()
+        json = requests.get(api_url + '/tweets').json()
         data_frame = json['Dataframe']
         df = pd.DataFrame.from_dict(data_frame, orient='index')
 

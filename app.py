@@ -1,3 +1,4 @@
+import configparser
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -5,6 +6,11 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from aux_functions import request_all_tweets_as_df, group_df_by_date, filter_df_by_date, filter_df_by_search_input
 from div_generator import generate_photo_gallery, generate_date_graph_figure_dict, generate_hashtag_graph_figure_dict, generate_tweet_cards_group
+
+config = configparser.ConfigParser()
+config.read('config')
+ui_url = config['UI']['url']
+api_url = config['API']['url']
 
 # APP INIT
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -14,7 +20,7 @@ app.title = 'TweetMonitor - Dashboard'
 colors = {'bg': '#212529', 'green': '#198754', 'white': '#e0dcdb'}
 
 # GLOBAL VAR
-df_base = request_all_tweets_as_df()
+df_base = request_all_tweets_as_df(api_url)
 df_base = df_base.drop_duplicates(subset=['id'])
 df_base['date'] = [str(i).split(' ')[0].strip() for i in df_base['date']]
 
@@ -27,7 +33,7 @@ app.layout = html.Div(
         html.Div(children=[
             dbc.NavbarSimple(
                 children=[
-                    dbc.NavItem(children=[dbc.NavLink("UI", href="http://50.116.36.123:80")]),
+                    dbc.NavItem(children=[dbc.NavLink("UI", href=ui_url)]),
                 ],
 
                 brand="Tweet Monitor - Dashboard",
