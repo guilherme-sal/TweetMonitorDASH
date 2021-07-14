@@ -59,32 +59,29 @@ def generate_hashtag_graph_figure_dict(df):
 
     df_hashtag = generate_df_hashtags(df)
 
-    traces_hashtag = go.Scatter(
-        x=df_hashtag['X'],
-        y=df_hashtag['Y'],
-        text=df_hashtag['hashtag'],
-        mode='markers+text',
+    traces_hashtag = go.Bar(
+        x=df_hashtag['hashtag'],
+        y=df_hashtag['count'],
+        text=df_hashtag['count'],
         hoverinfo='text',
         opacity=1,
-        marker={'size': df_hashtag['count'],
-                'color': random.sample(range(0, 10, 1), 10),
-                'colorscale': 'rainbow',
-                'sizeref': max(df_hashtag['count'])/100},
-
+        marker={'color': df_hashtag['count'],
+                'colorscale': 'tealgrn',
+                },
     )
 
     hashtag_graph_figure_dict = {
         'data': [traces_hashtag],
         'layout': go.Layout(
             xaxis={'title': '',
-                   'visible': False},
+                   'visible': True},
             yaxis={'title': '',
-                   'visible': False},
+                   'visible': True},
             hovermode='closest',
             plot_bgcolor=colors['bg'],
             paper_bgcolor=colors['bg'],
             font={'color': colors['white'],
-                  'size': 20},
+                  'size': 10},
             title_text='',
 
 

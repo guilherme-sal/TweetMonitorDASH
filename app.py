@@ -15,6 +15,7 @@ api_url = config['API']['url']
 # APP INIT
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = 'TweetMonitor - Dashboard'
+server = app.server
 
 # APP LAYOUT
 colors = {'bg': '#212529', 'green': '#198754', 'white': '#e0dcdb'}

@@ -60,7 +60,7 @@ def generate_list_of_images(df):
 
 def generate_df_hashtags(df):
 
-    size = 10
+    size = 20
 
     list_of_hashtags = []
 
@@ -72,9 +72,6 @@ def generate_df_hashtags(df):
     hashtags_dict = Counter(list_of_hashtags)
     df_hashtags = pd.DataFrame(hashtags_dict, index=[0]).T.reset_index().rename(columns={
         "index": "hashtag", 0: "count"}).sort_values('count', ascending=False).head(size)
-
-    df_hashtags['X'] = random.sample(range(0, 800, 50), 10)
-    df_hashtags['Y'] = random.sample(range(0, 808, 50), 10)
 
     return df_hashtags
 
