@@ -89,7 +89,7 @@ app.layout = html.Div(
                                            id='date_graph'),
                              ]),
                     # Hashtag graph
-                    html.Div(style={'height': '30%', 'width': '47%', 'margin': '20px', 'padding': '2px',
+                    html.Div(style={'height': '30%', 'width': '47%', 'margin': '20px', 'padding': '1px',
                                     'border': '1px solid',
                                     'border-color': colors['bg'], 'display': 'inline-block'},
                              children=[
