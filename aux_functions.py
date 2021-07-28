@@ -1,6 +1,5 @@
 import requests
 import pandas as pd
-import random
 from collections import Counter
 
 
@@ -44,6 +43,11 @@ def filter_df_by_search_input(df, search):
     return df
 
 
+def filter_df_by_language(df, language):
+    df = df.query(f"language == '{language}'")
+    return df
+
+
 def generate_list_of_images(df):
     df = df.sort_values('nretweets', ascending=False)
     list_of_img_links = []
@@ -52,14 +56,13 @@ def generate_list_of_images(df):
         if img_str == '[]':
             pass
         else:
-            img_list = img_str.replace("[", "").replace("]", "").replace("'","").split(",")
+            img_list = img_str.replace("[", "").replace("]", "").replace("'", "").split(",")
             for img in img_list:
                 list_of_img_links.append(img.strip())
     return list_of_img_links
 
 
 def generate_df_hashtags(df):
-
     size = 20
 
     list_of_hashtags = []
@@ -77,9 +80,6 @@ def generate_df_hashtags(df):
 
 
 def generate_retweets_df(df):
-
     df_retweets = df[['username', 'tweet', 'nretweets', 'date']]
     df_retweets = df_retweets.sort_values('nretweets', ascending=False).head(8)
     return df_retweets
-
-

@@ -4,8 +4,10 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
-from aux_functions import request_all_tweets_as_df, group_df_by_date, filter_df_by_date, filter_df_by_search_input
-from div_generator import generate_photo_gallery, generate_date_graph_figure_dict, generate_hashtag_graph_figure_dict, generate_tweet_cards_group
+from aux_functions import request_all_tweets_as_df, group_df_by_date, filter_df_by_date, filter_df_by_search_input, \
+    filter_df_by_language
+from div_generator import generate_photo_gallery, generate_date_graph_figure_dict, generate_hashtag_graph_figure_dict, \
+    generate_tweet_cards_group
 
 config = configparser.ConfigParser()
 config.read('config')
@@ -43,7 +45,7 @@ app.layout = html.Div(
 
         dbc.Row(style={'width': '100%', 'margin': '20px', 'padding': '20px', 'border': '1px solid'},
                 children=[
-                    html.Div(style={'color': colors['green'], 'padding': '5px'},
+                    html.Div(style={'color': colors['green'], 'padding': '5px', 'margin-top': '20px'},
                              children=[dcc.DatePickerRange(
                                  id='my-date-picker-range',
                                  min_date_allowed=df_base['date'].min(),
@@ -51,10 +53,22 @@ app.layout = html.Div(
                                  start_date=df_base['date'].min(),
                                  end_date=df_base['date'].max(),
                                  start_date_placeholder_text=df_base['date'].min(),
-                                 end_date_placeholder_text=df_base['date'].max(),
-                             ),
-                                 dbc.Input(style={'color': colors['green'], 'margin-top': '5px'},
-                                           id="search_input", type="text", placeholder="#Amazônia", debounce=False)
+                                 end_date_placeholder_text=df_base['date'].max(), ),
+
+                                 dbc.Input(style={'color': colors['green'], 'margin-top': '10px'},
+                                           id="search_input", type="text", placeholder="#Amazônia", debounce=False),
+
+                                 dcc.RadioItems(style={'color': colors['green'], 'margin-top': '10px', 'padding': '1px'},
+                                                id='language_selector',
+                                                options=[
+                                                    {'label': 'All languages  ', 'value': 'None'},
+                                                    {'label': 'Portuguese  ', 'value': 'pt'},
+                                                    {'label': 'English  ', 'value': 'en'},
+                                                ],
+                                                value='None',
+                                                labelStyle={'display': 'inline-block'},
+                                                inputStyle={'margin-left': '3px'},
+                                                )
                              ]),
                     # Photo gallery
                     html.Div(style={'margin': '20px', 'padding': '2px', 'border': '1px solid',
@@ -107,11 +121,15 @@ app.layout = html.Div(
     [Input('my-date-picker-range', 'start_date'),
      Input('my-date-picker-range', 'end_date'),
      Input('search_input', 'value'),
+     Input('language_selector', 'value')
      ])
-def update_output(start_date, end_date, search_input=None):
+def update_output(start_date, end_date, search_input=None, language_selector='None'):
     df = filter_df_by_date(df_base, start_date, end_date)
     if search_input:
         df = filter_df_by_search_input(df, search_input)
+
+    if language_selector != 'None':
+        df = filter_df_by_language(df, language_selector)
 
     df_grouped = group_df_by_date(df)
 

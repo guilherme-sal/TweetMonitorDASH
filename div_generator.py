@@ -66,7 +66,7 @@ def generate_hashtag_graph_figure_dict(df):
         hoverinfo='text',
         opacity=1,
         marker={'color': df_hashtag['count'],
-                'colorscale': 'tealgrn',
+                'colorscale': 'aggrnyl',
                 },
     )
 
